@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yummy English! - Foods & Beverages Class 3 SD</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Fredoka & Quicksand -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        * {
+            font-family: 'Fredoka', 'Quicksand', sans-serif;
+            user-select: none;
+        }
+
+        .bg-pattern {
+            background-color: #f0fdf4;
+            background-image: radial-gradient(#bbf7d0 2.5px, transparent 2.5px), radial-gradient(#bbf7d0 2.5px, #f0fdf4 2.5px);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+        }
+
+        .bouncy-btn {
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .bouncy-btn:hover {
+            transform: scale(1.04) translateY(-3px);
+        }
+        .bouncy-btn:active {
+            transform: scale(0.96) translateY(2px);
+        }
+
+        .card-flip {
+            perspective: 1000px;
+        }
+        .card-inner {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .card-inner.flipped {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            backface-visibility: hidden;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        @keyframes letter-pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.35); color: #d97706; font-weight: 800; }
+            100% { transform: scale(1); }
+        }
+        .letter-active {
+            display: inline-block;
+            animation: letter-pop 0.35s ease-in-out;
+            color: #d97706;
+            font-weight: 800;
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Printable setup for Certificate */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printable-certificate, #printable-certificate * {
+                visibility: visible;
+            }
+            #printable-certificate {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="bg-pattern min-h-screen text-slate-800 flex flex-col justify-between">
+
+    <!-- STUDENT REGISTRATION MODAL -->
+    <div id="modal-registration" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 sm:p-10 max-w-md w-full border-8 border-amber-300 shadow-2xl space-y-6 text-center floating">
+            <div class="bg-amber-100 text-amber-700 w-20 h-20 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner border-2 border-amber-300">
+                🍕
+            </div>
+
+            <div>
+                <span class="bg-amber-100 text-amber-800 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">
+                    Bahasa Inggris SD Kelas 3
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-800 mt-2">Selamat Datang! 👋</h2>
+                <p class="text-slate-500 text-xs sm:text-sm font-medium mt-1">Masukkan nama dan pilih kelasmu sebelum memulai game Yummy Words!</p>
+            </div>
+
+            <form onsubmit="handleRegistration(event)" class="space-y-4 text-left">
+                <div>
+                    <label class="block text-xs font-black text-slate-700 uppercase tracking-wide mb-1.5">
+                        <i class="fa-solid fa-user text-amber-500 mr-1"></i> Nama Lengkap Siswa:
+                    </label>
+                    <input type="text" id="reg-student-name" required placeholder="Contoh: Budi Pratama"
+                        class="w-full px-4 py-3 rounded-2xl border-2 border-amber-200 focus:border-amber-500 font-bold outline-none text-slate-800 text-sm shadow-sm transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-black text-slate-700 uppercase tracking-wide mb-1.5">
+                        <i class="fa-solid fa-school text-amber-500 mr-1"></i> Pilih Kelas:
+                    </label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="reg-class" value="3 A" checked class="peer hidden">
+                            <div class="p-3 text-center rounded-2xl border-2 border-slate-200 peer-checked:border-amber-500 peer-checked:bg-amber-100 peer-checked:text-amber-900 font-black text-base shadow-sm transition">
+                                🏫 Kelas 3 A
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="reg-class" value="3 B" class="peer hidden">
+                            <div class="p-3 text-center rounded-2xl border-2 border-slate-200 peer-checked:border-amber-500 peer-checked:bg-amber-100 peer-checked:text-amber-900 font-black text-base shadow-sm transition">
+                                🏫 Kelas 3 B
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bouncy-btn bg-emerald-500 hover:bg-emerald-600 text-white font-black text-lg py-3.5 rounded-2xl shadow-lg border-b-4 border-emerald-700 flex items-center justify-center gap-2 mt-2">
+                    <span>Mulai Main Game!</span>
+                    <i class="fa-solid fa-circle-play"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN HEADER -->
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b-4 border-amber-300 shadow-sm px-4 py-3">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center justify-between w-full sm:w-auto">
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchSection('home')">
+                    <div class="bg-amber-400 text-white p-2.5 rounded-2xl shadow-md text-2xl font-bold">
+                        🍗
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-black text-amber-600 tracking-wide leading-none">Yummy Words!</h1>
+                        <p class="text-[11px] text-amber-800 font-bold mt-1">Foods & Beverages SD Kelas 3</p>
+                    </div>
+                </div>
+
+                <!-- Active Student Profile Badge (Mobile) -->
+                <div class="sm:hidden bg-amber-100 px-3 py-1 rounded-full text-xs font-black text-amber-900 flex items-center gap-1 border border-amber-300">
+                    <i class="fa-solid fa-user-graduate"></i>
+                    <span id="badge-student-mobile">Siswa</span> (<span id="badge-class-mobile">3A</span>)
+                </div>
+            </div>
+
+            <!-- Stage Navigation & Profile Desktop -->
+            <div class="flex items-center space-x-2 sm:space-x-3 w-full sm:w-auto justify-between sm:justify-end">
+                <div class="hidden sm:flex items-center gap-2 bg-amber-50 border-2 border-amber-200 px-3 py-1.5 rounded-2xl text-xs font-bold text-amber-900">
+                    <i class="fa-solid fa-user-graduate text-amber-600 text-sm"></i>
+                    <div>
+                        <div id="badge-student-name" class="font-black">Budi Pratama</div>
+                        <div id="badge-student-class" class="text-[10px] text-amber-700">Kelas 3 A</div>
+                    </div>
+                    <button onclick="openRegistrationModal()" title="Ganti Nama/Kelas" class="ml-1 text-slate-400 hover:text-amber-600">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                </div>
+
+                <!-- Stage Buttons -->
+                <div class="flex items-center space-x-1 bg-slate-100 p-1.5 rounded-2xl border border-slate-200 w-full sm:w-auto justify-around">
+                    <button id="nav-btn-1" onclick="switchSection('memorize')" class="px-2.5 sm:px-3 py-1.5 rounded-xl font-black text-xs sm:text-sm transition flex items-center gap-1">
+                        <span>1.</span> <span>Hafalan 🧠</span>
+                    </button>
+                    <button id="nav-btn-2" onclick="switchSection('recall')" class="px-2.5 sm:px-3 py-1.5 rounded-xl font-black text-xs sm:text-sm transition flex items-center gap-1">
+                        <span>2.</span> <span>Mengingat 🧩</span>
+                    </button>
+                    <button id="nav-btn-3" onclick="switchSection('test')" class="px-2.5 sm:px-3 py-1.5 rounded-xl font-black text-xs sm:text-sm transition flex items-center gap-1">
+                        <span>3.</span> <span>Ujian ✏️</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto w-full p-4 sm:p-6 flex-grow">
+
+        <section id="sec-home" class="space-y-6 text-center py-4 sm:py-8">
+            <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border-4 border-emerald-300 relative overflow-hidden">
+                <div class="absolute -right-8 -top-8 text-8xl opacity-10">🍕</div>
+                <div class="absolute -left-8 -bottom-8 text-8xl opacity-10">🧃</div>
+
+                <span class="bg-emerald-100 text-emerald-800 px-4 py-1.5 rounded-full font-bold text-xs sm:text-sm tracking-wider uppercase inline-block mb-3">
+                    Halo, <span id="welcome-student-name">Siswa</span> (<span id="welcome-student-class">Kelas 3 A</span>)!
+                </span>
+
+                <h2 class="text-2xl sm:text-4xl font-black text-slate-800 leading-snug mb-3">
+                    Mari Kuasai Kosa Kata <br class="hidden sm:inline"><span class="text-emerald-600">Foods & Beverages</span> dalam Bahasa Inggris! 🍗🥤
+                </h2>
+
+                <p class="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto mb-8 font-medium">
+                    Ada 10 kata seru yang akan kamu pelajari. Lewati 3 tahapan berikut dan dapatkan Sertifikat Juara dengan namamu!
+                </p>
+
+                <!-- 3 Stage Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto mb-8">
+                    <div onclick="switchSection('memorize')" class="bg-amber-50 hover:bg-amber-100 border-3 border-amber-300 p-5 rounded-2xl cursor-pointer bouncy-btn text-left">
+                        <div class="text-3xl mb-2">1️⃣ 📢</div>
+                        <h3 class="font-black text-amber-700 text-lg">1. Memorization</h3>
+                        <p class="text-xs text-amber-900 mt-1">Dengarkan suara kata & ejaan hurufnya (Spelling) satu per satu.</p>
+                    </div>
+
+                    <div onclick="switchSection('recall')" class="bg-blue-50 hover:bg-blue-100 border-3 border-blue-300 p-5 rounded-2xl cursor-pointer bouncy-btn text-left">
+                        <div class="text-3xl mb-2">2️⃣ 🧩</div>
+                        <h3 class="font-black text-blue-700 text-lg">2. Recall Game</h3>
+                        <p class="text-xs text-blue-900 mt-1">Latih ingatanmu dengan Flipping Cards & Pick The Right Word.</p>
+                    </div>
+
+                    <div onclick="switchSection('test')" class="bg-purple-50 hover:bg-purple-100 border-3 border-purple-300 p-5 rounded-2xl cursor-pointer bouncy-btn text-left">
+                        <div class="text-3xl mb-2">3️⃣ 🏅</div>
+                        <h3 class="font-black text-purple-700 text-lg">3. Test / Kuis</h3>
+                        <p class="text-xs text-purple-900 mt-1">Kerjakan 10 soal ujian dan dapatkan Sertifikat Nilai 100!</p>
+                    </div>
+                </div>
+
+                <button onclick="switchSection('memorize')" class="bouncy-btn bg-emerald-500 hover:bg-emerald-600 text-white font-black text-lg sm:text-xl px-10 py-4 rounded-2xl shadow-lg border-b-4 border-emerald-700 inline-flex items-center gap-3">
+                    <span>Mulai Tahap 1 (Hafalan)</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <section id="sec-memorize" class="hidden space-y-6">
+            <div class="bg-white rounded-3xl p-5 sm:p-8 shadow-xl border-4 border-amber-300">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
+                    <div>
+                        <span class="inline-block bg-amber-100 text-amber-800 font-black px-3 py-1 rounded-full text-xs mb-1">
+                            TAHAP 1 DARI 3
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-black text-amber-600">
+                            🧠 Memorization (Pengucapan & Ejaan)
+                        </h2>
+                        <p class="text-slate-600 text-xs sm:text-sm">Klik tombol <strong class="text-amber-700">"🔊 Suara"</strong> untuk kata utuh, dan <strong class="text-amber-700">"🔤 Eja Huruf"</strong> untuk mendengar ejaannya!</p>
+                    </div>
+
+                    <button onclick="switchSection('recall')" class="bouncy-btn bg-blue-500 text-white font-bold px-5 py-2.5 rounded-xl shadow border-b-4 border-blue-700 text-xs sm:text-sm flex items-center gap-2 self-end sm:self-auto">
+                        <span>Lanjut ke Recall Game</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <!-- Vocab Grid Container -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4" id="vocab-cards-container">
+                    <!-- Vocab cards populated dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-recall" class="hidden space-y-6">
+            <div class="bg-white rounded-3xl p-5 sm:p-8 shadow-xl border-4 border-blue-300">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
+                    <div>
+                        <span class="inline-block bg-blue-100 text-blue-800 font-black px-3 py-1 rounded-full text-xs mb-1">
+                            TAHAP 2 DARI 3
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-black text-blue-600">
+                            🧩 Recall Game (Mengingat Kata)
+                        </h2>
+                        <p class="text-slate-600 text-xs sm:text-sm">Pilih mini-game interaktif di bawah ini untuk melatih ingatanmu!</p>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button onclick="setRecallTab('memory')" id="tab-btn-memory" class="px-3.5 py-2 rounded-xl font-bold text-xs sm:text-sm bg-blue-600 text-white shadow">
+                            🎴 Flipping Match
+                        </button>
+                        <button onclick="setRecallTab('drag')" id="tab-btn-drag" class="px-3.5 py-2 rounded-xl font-bold text-xs sm:text-sm bg-slate-100 text-slate-600 hover:bg-slate-200">
+                            🎯 Pick The Word
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SUB-GAME 1: MEMORY CARD FLIP -->
+                <div id="recall-sub-memory" class="space-y-4">
+                    <div class="bg-blue-50 p-3.5 rounded-2xl flex justify-between items-center border border-blue-200">
+                        <span class="font-bold text-blue-900 text-xs sm:text-sm">Temukan 6 pasangan gambar & kata bahasa Inggris yang cocok!</span>
+                        <button onclick="initMemoryGame()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold px-3 py-1.5 rounded-xl text-xs bouncy-btn shadow">
+                            <i class="fa-solid fa-rotate-right"></i> Acak Ulang
+                        </button>
+                    </div>
+
+                    <div id="memory-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2.5 sm:gap-4 my-4">
+                        <!-- Cards injected via JS -->
+                    </div>
+                </div>
+
+                <!-- SUB-GAME 2: PICK THE RIGHT WORD -->
+                <div id="recall-sub-drag" class="hidden space-y-6">
+                    <div class="bg-indigo-50 p-3.5 rounded-2xl border border-indigo-200 flex justify-between items-center">
+                        <span class="font-bold text-indigo-900 text-xs sm:text-sm">Pilih Bahasa Inggris yang sesuai untuk makanan di layar!</span>
+                        <span id="drag-score-counter" class="bg-indigo-600 text-white font-bold text-xs px-3 py-1 rounded-full">Progres: 1 / 10</span>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-6 items-center justify-center bg-amber-50/50 p-6 rounded-3xl border-2 border-dashed border-indigo-200">
+                        <div class="text-center">
+                            <div id="drag-item-icon" class="text-7xl sm:text-8xl bg-white p-6 rounded-3xl shadow-md border-4 border-amber-300 inline-block floating">
+                                🍗
+                            </div>
+                            <div id="drag-item-indo" class="mt-3 text-base sm:text-lg font-black text-slate-700 bg-white px-4 py-1.5 rounded-full shadow-sm inline-block">
+                                Ayam Goreng
+                            </div>
+                        </div>
+
+                        <div class="w-full md:w-80 space-y-3" id="drag-options-container">
+                            <!-- Options injected JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Next Stage Button -->
+                <div class="flex justify-end pt-4 border-t border-slate-100">
+                    <button onclick="switchSection('test')" class="bouncy-btn bg-purple-600 text-white font-black px-6 py-3 rounded-2xl shadow-lg border-b-4 border-purple-800 text-sm sm:text-base flex items-center gap-2">
+                        <span>Lanjut ke Ujian (Tahap 3)</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-test" class="hidden space-y-6">
+            <div class="bg-white rounded-3xl p-5 sm:p-8 shadow-xl border-4 border-purple-300">
+                <!-- Quiz Header & Progress Bar -->
+                <div id="quiz-header-bar" class="mb-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs font-black text-purple-700 uppercase tracking-wider">
+                            <i class="fa-solid fa-pen-nib mr-1"></i> Ujian Foods & Beverages
+                        </span>
+                        <span id="quiz-step-text" class="text-xs font-black text-purple-900 bg-purple-100 px-3 py-1 rounded-full">
+                            Soal 1 dari 10
+                        </span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-slate-200">
+                        <div id="quiz-progress" class="bg-gradient-to-r from-purple-500 to-pink-500 h-full rounded-full transition-all duration-300" style="width: 10%;"></div>
+                    </div>
+                </div>
+
+                <!-- Active Question Card -->
+                <div id="quiz-card" class="space-y-6">
+                    <div class="bg-purple-50/70 p-6 rounded-2xl border-2 border-purple-200 text-center relative">
+                        <span id="quiz-type-badge" class="absolute top-3 left-3 bg-purple-200 text-purple-800 text-[10px] font-black px-2.5 py-0.5 rounded-md">
+                            Pilihan Ganda
+                        </span>
+
+                        <div id="quiz-visual-area" class="my-4 min-h-[90px] flex items-center justify-center">
+                            <!-- Visual content injected via JS -->
+                        </div>
+
+                        <h3 id="quiz-question-text" class="text-xl sm:text-2xl font-black text-slate-800">
+                            Bahasa Inggris dari "Ayam Goreng" adalah?
+                        </h3>
+                    </div>
+
+                    <!-- Options Grid -->
+                    <div id="quiz-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- Options injected JS -->
+                    </div>
+                </div>
+
+                <!-- Quiz Result Screen -->
+                <div id="quiz-result-card" class="hidden text-center space-y-6 py-4">
+                    <div class="text-6xl mb-2 floating">🏆</div>
+                    <h2 class="text-3xl font-black text-slate-800">Luar Biasa! Kamu Selesai!</h2>
+                    <p class="text-slate-600 text-sm font-medium">Berikut adalah hasil Ujian Kosa Kata milikmu:</p>
+
+                    <div class="flex justify-center items-center gap-2 text-4xl text-amber-400" id="star-rating">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+
+                    <div class="bg-amber-50 max-w-xs mx-auto p-4 rounded-2xl border-2 border-amber-300 shadow-sm">
+                        <div class="text-xs text-amber-800 font-black">NILAI AKHIR</div>
+                        <div id="final-score" class="text-4xl font-black text-amber-600 my-1">100 / 100</div>
+                        <div id="final-student-info" class="text-xs font-bold text-amber-900">Budi Pratama (Kelas 3 A)</div>
+                    </div>
+
+                    <!-- KOTAK PESAN APRESIASI/MOTIVASI SESUAI SKOR -->
+                    <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-4 max-w-md mx-auto text-center space-y-1 shadow-sm">
+                        <p id="feedback-msg-en" class="text-lg sm:text-xl font-black text-indigo-700">"Excellent! You did a great job!"</p>
+                        <p id="feedback-msg-id" class="text-sm font-bold text-indigo-900">Luar biasa! Kamu hebat!</p>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center gap-3 pt-2">
+                        <button onclick="openCertificateModal()" class="bouncy-btn bg-emerald-500 hover:bg-emerald-600 text-white font-black px-6 py-3 rounded-2xl shadow-lg border-b-4 border-emerald-700 text-sm flex items-center gap-2">
+                            <span>Lihat Sertifikat Juara 📜</span>
+                        </button>
+                        <button onclick="resetQuiz()" class="bouncy-btn bg-purple-600 text-white font-black px-5 py-3 rounded-2xl shadow-lg border-b-4 border-purple-800 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-rotate-right"></i> Ulangi Kuis
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div id="modal-certificate" class="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full border-8 border-amber-300 relative shadow-2xl space-y-6">
+                <button onclick="closeCertificateModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl font-bold">
+                    ✕
+                </button>
+
+                <!-- Certificate Graphic Frame -->
+                <div id="printable-certificate" class="border-4 border-dashed border-amber-300 p-6 sm:p-8 rounded-2xl text-center space-y-4 bg-gradient-to-b from-amber-50/50 to-orange-50/30 relative overflow-hidden">
+                    <div class="flex justify-between items-center text-amber-500 text-2xl">
+                        <span>✨</span>
+                        <span class="text-xs font-black tracking-widest text-amber-800 uppercase">SERTIFIKAT KELULUSAN BAHASA INGGRIS</span>
+                        <span>✨</span>
+                    </div>
+
+                    <h3 class="text-2xl sm:text-4xl font-black text-amber-800 tracking-wide">PIAGAM PENGHARGAAN</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 font-semibold">Sertifikat ini secara resmi diberikan kepada:</p>
+
+                    <div class="py-2">
+                        <div id="cert-student-name" class="text-2xl sm:text-4xl font-black text-purple-700 border-b-4 border-purple-300 inline-block px-8 py-1">
+                            Budi Pratama
+                        </div>
+                        <div id="cert-student-class" class="text-sm font-bold text-purple-900 mt-2">
+                            Siswa Kelas 3 A
+                        </div>
+                    </div>
+
+                    <p class="text-xs sm:text-sm text-slate-600 max-w-md mx-auto font-medium">
+                        Atas keberhasilannya menguasai materi Bahasa Inggris topik <br>
+                        <strong class="text-amber-800 font-black">"Foods and Beverages" (Kelas 3 SD)</strong> dengan nilai luar biasa!
+                    </p>
+
+                    <div class="flex justify-around items-center pt-4 border-t border-amber-200/80">
+                        <div class="text-center">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">NILAI KUIS</div>
+                            <div id="cert-score" class="text-2xl font-black text-emerald-600">100</div>
+                        </div>
+                        <div class="text-4xl">🏅</div>
+                        <div class="text-center">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">TANGGAL</div>
+                            <div id="cert-date" class="text-xs font-bold text-slate-700">08 Okt 2026</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center gap-3 pt-2">
+                    <button onclick="window.print()" class="bg-blue-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm bouncy-btn flex items-center gap-2 shadow">
+                        <i class="fa-solid fa-print"></i> Cetak / Simpan PDF
+                    </button>
+                    <button onclick="closeCertificateModal()" class="bg-slate-200 text-slate-700 font-bold px-5 py-2.5 rounded-xl text-sm bouncy-btn">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white/80 border-t border-amber-200 py-3 text-center text-xs text-slate-500">
+        <p>✨ Game Interaktif Bahasa Inggris SD Kelas 3 • Foods and Beverages ✨</p>
+    </footer>
+
+    <script>
+        // 10 Mandatory Vocabulary Items
+        const VOCAB_DATA = [
+            { id: 'chicken', en: 'Fried chicken', id_name: 'Ayam goreng', icon: '🍗', spelling: 'F-R-I-E-D C-H-I-C-K-E-N' },
+            { id: 'rice', en: 'Yellow rice', id_name: 'Nasi kuning', icon: '🍚', spelling: 'Y-E-L-L-O-W R-I-C-E' },
+            { id: 'meatball', en: 'Meatball', id_name: 'Bakso', icon: '🧆', spelling: 'M-E-A-T-B-A-L-L' },
+            { id: 'soup', en: 'Soup', id_name: 'Sup', icon: '🍲', spelling: 'S-O-U-P' },
+            { id: 'coffee', en: 'Coffee', id_name: 'Kopi', icon: '☕', spelling: 'C-O-F-F-E-E' },
+            { id: 'tea', en: 'Tea', id_name: 'Teh', icon: '🍵', spelling: 'T-E-A' },
+            { id: 'juice', en: 'Strawberry juice', id_name: 'Jus stroberi', icon: '🥤', spelling: 'S-T-R-A-W-B-E-R-R-Y J-U-I-C-E' },
+            { id: 'pizza', en: 'Pizza', id_name: 'Piza', icon: '🍕', spelling: 'P-I-Z-Z-A' },
+            { id: 'cake', en: 'Cake', id_name: 'Kue', icon: '🍰', spelling: 'C-A-K-E' },
+            { id: 'noodle', en: 'Noodle', id_name: 'Mie', icon: '🍜', spelling: 'N-O-O-D-L-E' }
+        ];
+
+        // Global Student State
+        let currentStudent = {
+            name: 'Budi Pratama',
+            studentClass: '3 A'
+        };
+
+        // Web Audio Synthesizer for Fun Sound Effects
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'correct') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.3); // A5
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
+                osc.frequency.setValueAtTime(164.81, audioCtx.currentTime + 0.18); // E3
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.2);
+            } else if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(450, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.08);
+            } else if (type === 'win') {
+                confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+            }
+        }
+
+        // Web Speech API Pronunciation & Letter-by-Letter Spelling Audio Generator
+        function speakText(text, isSpelling = false, highlightContainerId = null) {
+            if (!('speechSynthesis' in window)) {
+                alert("Browser ini tidak mendukung fitur suara otomatis.");
+                return;
+            }
+
+            window.speechSynthesis.cancel(); // Cancel any existing speech queued
+
+            if (isSpelling) {
+                // Speech synthesis letter by letter
+                const cleanChars = text.toUpperCase().split('');
+                let idx = 0;
+
+                function speakNextChar() {
+                    if (idx < cleanChars.length) {
+                        const char = cleanChars[idx];
+                        
+                        // Highlight character UI if element provided
+                        if (highlightContainerId) {
+                            const el = document.getElementById(highlightContainerId);
+                            if (el) {
+                                const spans = el.querySelectorAll('.spelling-char');
+                                spans.forEach((span, spanIdx) => {
+                                    if (spanIdx === idx) {
+                                        span.classList.add('letter-active');
+                                    } else {
+                                        span.classList.remove('letter-active');
+                                    }
+                                });
+                            }
+                        }
+
+                        if (char !== ' ') {
+                            const letterUtterance = new SpeechSynthesisUtterance(char);
+                            letterUtterance.lang = 'en-US';
+                            letterUtterance.rate = 0.9;
+                            letterUtterance.onend = () => {
+                                idx++;
+                                setTimeout(speakNextChar, 180);
+                            };
+                            window.speechSynthesis.speak(letterUtterance);
+                        } else {
+                            idx++;
+                            setTimeout(speakNextChar, 250); // Pause for spaces
+                        }
+                    } else {
+                        // Reset visual highlight & speak full word finally
+                        if (highlightContainerId) {
+                            const el = document.getElementById(highlightContainerId);
+                            if (el) {
+                                const spans = el.querySelectorAll('.spelling-char');
+                                spans.forEach(s => s.classList.remove('letter-active'));
+                            }
+                        }
+                        const fullUtterance = new SpeechSynthesisUtterance(text);
+                        fullUtterance.lang = 'en-US';
+                        fullUtterance.rate = 0.85;
+                        window.speechSynthesis.speak(fullUtterance);
+                    }
+                }
+
+                speakNextChar();
+
+            } else {
+                // Standard full word speech
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Registration Modal Logic
+        function openRegistrationModal() {
+            playSound('click');
+            document.getElementById('modal-registration').classList.remove('hidden');
+        }
+
+        function handleRegistration(event) {
+            event.preventDefault();
+            playSound('click');
+
+            const nameInput = document.getElementById('reg-student-name').value.trim();
+            const classInput = document.querySelector('input[name="reg-class"]:checked').value;
+
+            if (!nameInput) return;
+
+            currentStudent.name = nameInput;
+            currentStudent.studentClass = classInput;
+
+            updateStudentProfileUI();
+            document.getElementById('modal-registration').classList.add('hidden');
+        }
+
+        function updateStudentProfileUI() {
+            document.getElementById('badge-student-name').textContent = currentStudent.name;
+            document.getElementById('badge-student-class').textContent = 'Kelas ' + currentStudent.studentClass;
+
+            document.getElementById('badge-student-mobile').textContent = currentStudent.name.split(' ')[0];
+            document.getElementById('badge-class-mobile').textContent = currentStudent.studentClass;
+
+            document.getElementById('welcome-student-name').textContent = currentStudent.name;
+            document.getElementById('welcome-student-class').textContent = 'Kelas ' + currentStudent.studentClass;
+        }
+
+        // Navigation Controller
+        function switchSection(secId) {
+            playSound('click');
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+
+            const target = document.getElementById('sec-' + secId);
+            if (target) target.classList.remove('hidden');
+
+            ['1', '2', '3'].forEach(num => {
+                const btn = document.getElementById('nav-btn-' + num);
+                btn.className = "px-2.5 sm:px-3 py-1.5 rounded-xl font-black text-xs sm:text-sm transition flex items-center gap-1 text-slate-600 hover:bg-slate-200";
+            });
+
+            if (secId === 'memorize') {
+                document.getElementById('nav-btn-1').className = "px-2.5 sm:px-3 py-1.5 rounded-xl font-black text-xs sm:text-sm transition flex items-center gap-1 bg-amber-400 text-slate-900 shadow";
+            } else if (secId === 'recall') {
+                document.getElementById('nav-btn-2').className = "px-2.5 sm:px-3 py-1.5 rounded-xl font-black text-xs sm:text-sm transition flex items-center gap-1 bg-blue-500 text-white shadow";
+            } else if (secId === 'test') {
+                document.getElementById('nav-btn-3').className = "px-2.5 sm:px-3 py-1.5 rounded-xl font-black text-xs sm:text-sm transition flex items-center gap-1 bg-purple-600 text-white shadow";
+                initQuiz();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // SECTION 1: Memorization Renderer
+        function renderMemorizeCards() {
+            const container = document.getElementById('vocab-cards-container');
+            container.innerHTML = '';
+
+            VOCAB_DATA.forEach((item) => {
+                const card = document.createElement('div');
+                card.className = "bg-amber-50/70 hover:bg-amber-100/80 border-2 border-amber-200 rounded-2xl p-3.5 text-center flex flex-col justify-between shadow-sm transition hover:shadow-md";
+
+                // Generate character spans for spelling animation
+                const charSpans = item.en.split('').map((char, i) => {
+                    if (char === ' ') return ' ';
+                    return `<span class="spelling-char inline-block" id="char-${item.id}-${i}">${char}</span>`;
+                }).join('');
+
+                card.innerHTML = `
+                    <div class="text-4xl sm:text-5xl my-1 floating">${item.icon}</div>
+                    <div class="font-black text-slate-800 text-base sm:text-lg leading-snug my-1" id="spell-target-${item.id}">
+                        ${charSpans}
+                    </div>
+                    <div class="text-[11px] font-bold text-amber-800 mb-3">${item.id_name}</div>
+
+                    <div class="space-y-1.5">
+                        <button onclick="speakText('${item.en}', false)" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-1.5 px-2 rounded-xl text-xs bouncy-btn flex items-center justify-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-volume-high"></i> Suara
+                        </button>
+                        <button onclick="speakText('${item.en}', true, 'spell-target-${item.id}')" class="w-full bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-1.5 px-2 rounded-xl text-xs bouncy-btn flex items-center justify-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-spell-check"></i> Eja Huruf
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // SECTION 2: Recall Minigames Logic
+        function setRecallTab(tab) {
+            playSound('click');
+            const memSub = document.getElementById('recall-sub-memory');
+            const dragSub = document.getElementById('recall-sub-drag');
+            const btnMem = document.getElementById('tab-btn-memory');
+            const btnDrag = document.getElementById('tab-btn-drag');
+
+            if (tab === 'memory') {
+                memSub.classList.remove('hidden');
+                dragSub.classList.add('hidden');
+                btnMem.className = "px-3.5 py-2 rounded-xl font-bold text-xs sm:text-sm bg-blue-600 text-white shadow";
+                btnDrag.className = "px-3.5 py-2 rounded-xl font-bold text-xs sm:text-sm bg-slate-100 text-slate-600 hover:bg-slate-200";
+            } else {
+                memSub.classList.add('hidden');
+                dragSub.classList.remove('hidden');
+                btnDrag.className = "px-3.5 py-2 rounded-xl font-bold text-xs sm:text-sm bg-indigo-600 text-white shadow";
+                btnMem.className = "px-3.5 py-2 rounded-xl font-bold text-xs sm:text-sm bg-slate-100 text-slate-600 hover:bg-slate-200";
+                initDragGame();
+            }
+        }
+
+        // Card Memory Flipping Logic
+        let memoryDeck = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+
+        function initMemoryGame() {
+            const grid = document.getElementById('memory-grid');
+            grid.innerHTML = '';
+            flippedCards = [];
+            matchedPairs = 0;
+
+            const shuffledVocab = [...VOCAB_DATA].sort(() => 0.5 - Math.random()).slice(0, 6);
+
+            memoryDeck = [];
+            shuffledVocab.forEach(item => {
+                memoryDeck.push({ key: item.id, type: 'icon', val: item.icon, name: item.en });
+                memoryDeck.push({ key: item.id, type: 'text', val: item.en, name: item.en });
+            });
+
+            memoryDeck.sort(() => 0.5 - Math.random());
+
+            memoryDeck.forEach((card, idx) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = "card-flip h-24 sm:h-28 cursor-pointer";
+                cardEl.innerHTML = `
+                    <div class="card-inner w-full h-full relative border-2 border-blue-200 rounded-2xl shadow-sm bg-white" id="mem-card-${idx}" onclick="flipMemoryCard(${idx})">
+                        <div class="card-front absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold">
+                            ❓
+                        </div>
+                        <div class="card-back absolute inset-0 bg-white rounded-2xl flex items-center justify-center p-2 text-center border-2 border-blue-400">
+                            ${card.type === 'icon' ? `<span class="text-4xl">${card.val}</span>` : `<span class="font-black text-xs sm:text-sm text-indigo-700">${card.val}</span>`}
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(cardEl);
+            });
+        }
+
+        function flipMemoryCard(idx) {
+            if (flippedCards.length >= 2) return;
+            const cardInner = document.getElementById(`mem-card-${idx}`);
+            if (cardInner.classList.contains('flipped')) return;
+
+            playSound('click');
+            cardInner.classList.add('flipped');
+            flippedCards.push({ idx, data: memoryDeck[idx] });
+
+            if (flippedCards.length === 2) {
+                const [c1, c2] = flippedCards;
+                if (c1.data.key === c2.data.key && c1.idx !== c2.idx) {
+                    playSound('correct');
+                    matchedPairs++;
+                    speakText(c1.data.name);
+                    flippedCards = [];
+                    if (matchedPairs === 6) {
+                        setTimeout(() => {
+                            playSound('win');
+                        }, 500);
+                    }
+                } else {
+                    setTimeout(() => {
+                        playSound('wrong');
+                        document.getElementById(`mem-card-${c1.idx}`).classList.remove('flipped');
+                        document.getElementById(`mem-card-${c2.idx}`).classList.remove('flipped');
+                        flippedCards = [];
+                    }, 900);
+                }
+            }
+        }
+
+        // Pick Word Game Logic
+        let dragCurrentIndex = 0;
+        let dragItems = [];
+
+        function initDragGame() {
+            dragCurrentIndex = 0;
+            dragItems = [...VOCAB_DATA].sort(() => 0.5 - Math.random());
+            renderDragQuestion();
+        }
+
+        function renderDragQuestion() {
+            if (dragCurrentIndex >= dragItems.length) {
+                playSound('win');
+                initDragGame();
+                return;
+            }
+
+            const current = dragItems[dragCurrentIndex];
+            document.getElementById('drag-item-icon').textContent = current.icon;
+            document.getElementById('drag-item-indo').textContent = current.id_name;
+            document.getElementById('drag-score-counter').textContent = `Progres: ${dragCurrentIndex + 1} / ${dragItems.length}`;
+
+            const wrongOptions = VOCAB_DATA.filter(item => item.id !== current.id)
+                                          .sort(() => 0.5 - Math.random())
+                                          .slice(0, 3)
+                                          .map(item => item.en);
+
+            const allChoices = [current.en, ...wrongOptions].sort(() => 0.5 - Math.random());
+
+            const container = document.getElementById('drag-options-container');
+            container.innerHTML = '';
+
+            allChoices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = "w-full bg-white hover:bg-indigo-50 border-2 border-indigo-200 text-indigo-900 font-black p-3 rounded-2xl shadow-sm bouncy-btn text-center text-sm sm:text-base";
+                btn.textContent = choice;
+                btn.onclick = () => checkDragAnswer(choice, current.en, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function checkDragAnswer(selected, correct, btnEl) {
+            if (selected === correct) {
+                playSound('correct');
+                btnEl.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600');
+                speakText(correct);
+                dragCurrentIndex++;
+                setTimeout(renderDragQuestion, 700);
+            } else {
+                playSound('wrong');
+                btnEl.classList.add('bg-rose-100', 'border-rose-400', 'text-rose-700');
+            }
+        }
+
+        // SECTION 3: Test / Quiz Engine
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let quizQuestions = [];
+
+        function initQuiz() {
+            currentQuizIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-result-card').classList.add('hidden');
+            document.getElementById('quiz-card').classList.remove('hidden');
+            document.getElementById('quiz-header-bar').classList.remove('hidden');
+
+            generateQuizQuestions();
+            renderQuizCard();
+        }
+
+        function generateQuizQuestions() {
+            quizQuestions = VOCAB_DATA.map(item => {
+                const randType = Math.floor(Math.random() * 3);
+                const wrongChoices = VOCAB_DATA.filter(v => v.id !== item.id)
+                                              .sort(() => 0.5 - Math.random())
+                                              .slice(0, 3)
+                                              .map(v => v.en);
+
+                const choices = [item.en, ...wrongChoices].sort(() => 0.5 - Math.random());
+
+                if (randType === 0) {
+                    return {
+                        badge: 'Soal Terjemahan',
+                        visual: `<div class="text-7xl floating">${item.icon}</div>`,
+                        question: `Bahasa Inggris dari "${item.id_name}" adalah?`,
+                        correct: item.en,
+                        choices: choices
+                    };
+                } else if (randType === 1) {
+                    return {
+                        badge: 'Kuis Audio 🎧',
+                        visual: `<button onclick="speakText('${item.en}')" class="bg-purple-500 hover:bg-purple-600 text-white font-bold p-5 rounded-full text-3xl shadow-lg bouncy-btn"><i class="fa-solid fa-volume-high"></i></button>`,
+                        question: `Tekan tombol audio di atas! Makanan/minuman apakah itu?`,
+                        correct: item.en,
+                        choices: choices
+                    };
+                } else {
+                    return {
+                        badge: 'Ejaan Bahasa Inggris 🔤',
+                        visual: `<div class="text-6xl mb-2">${item.icon}</div>`,
+                        question: `Manakah ejaan Bahasa Inggris yang benar untuk "${item.id_name}"?`,
+                        correct: item.en,
+                        choices: choices
+                    };
+                }
+            }).sort(() => 0.5 - Math.random());
+        }
+
+        function renderQuizCard() {
+            if (currentQuizIndex >= quizQuestions.length) {
+                showQuizResults();
+                return;
+            }
+
+            const q = quizQuestions[currentQuizIndex];
+
+            document.getElementById('quiz-step-text').textContent = `Soal ${currentQuizIndex + 1} dari ${quizQuestions.length}`;
+            document.getElementById('quiz-progress').style.width = `${((currentQuizIndex + 1) / quizQuestions.length) * 100}%`;
+
+            document.getElementById('quiz-type-badge').textContent = q.badge;
+            document.getElementById('quiz-visual-area').innerHTML = q.visual;
+            document.getElementById('quiz-question-text').textContent = q.question;
+
+            const grid = document.getElementById('quiz-options-grid');
+            grid.innerHTML = '';
+
+            q.choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = "quiz-opt-btn bg-white hover:bg-purple-50 border-2 border-purple-200 hover:border-purple-400 text-purple-950 font-black p-4 rounded-2xl shadow-sm text-left bouncy-btn flex items-center justify-between text-base";
+                btn.innerHTML = `
+                    <span>${choice}</span>
+                    <i class="fa-regular fa-circle text-purple-300"></i>
+                `;
+                btn.onclick = () => handleQuizAnswer(choice, q.correct, btn);
+                grid.appendChild(btn);
+            });
+
+            if (q.badge.includes('Audio')) {
+                speakText(q.correct);
+            }
+        }
+
+        function handleQuizAnswer(selected, correct, btnEl) {
+            // Disable all option buttons immediately
+            const allBtns = document.querySelectorAll('.quiz-opt-btn');
+            allBtns.forEach(b => b.onclick = null);
+
+            if (selected === correct) {
+                playSound('correct');
+                btnEl.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600');
+                btnEl.querySelector('i').className = "fa-solid fa-circle-check text-white";
+                quizScore += 10;
+            } else {
+                playSound('wrong');
+                btnEl.classList.add('bg-rose-500', 'text-white', 'border-rose-600');
+                btnEl.querySelector('i').className = "fa-solid fa-circle-xmark text-white";
+
+                // Highlight correct one
+                allBtns.forEach(b => {
+                    if (b.textContent.trim() === correct) {
+                        b.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900');
+                    }
+                });
+            }
+
+            currentQuizIndex++;
+            setTimeout(renderQuizCard, 1100);
+        }
+
+        function showQuizResults() {
+            playSound('win');
+            document.getElementById('quiz-card').classList.add('hidden');
+            document.getElementById('quiz-header-bar').classList.add('hidden');
+
+            const resultCard = document.getElementById('quiz-result-card');
+            resultCard.classList.remove('hidden');
+
+            document.getElementById('final-score').textContent = `${quizScore} / 100`;
+            document.getElementById('final-student-info').textContent = `${currentStudent.name} (Kelas ${currentStudent.studentClass})`;
+
+            // Penentuan Pesan Apresiasi berdasarkan Nilai/Skor (Sesuai Gambar)
+            let msgEn = "";
+            let msgId = "";
+
+            if (quizScore >= 80) {
+                msgEn = '"Excellent! You did a great job!"';
+                msgId = 'Luar biasa! Kamu hebat!';
+            } else if (quizScore >= 60) {
+                msgEn = '"Good job! You’re getting better!"';
+                msgId = 'Kerja bagus! Kamu makin baik!';
+            } else {
+                msgEn = '"Nice try! Let’s try again, you can do it!"';
+                msgId = 'Usaha bagus! Ayo coba lagi, kamu pasti bisa!';
+            }
+
+            document.getElementById('feedback-msg-en').textContent = msgEn;
+            document.getElementById('feedback-msg-id').textContent = msgId;
+
+            // Stars
+            const starContainer = document.getElementById('star-rating');
+            if (quizScore >= 90) {
+                starContainer.innerHTML = '<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>';
+            } else if (quizScore >= 60) {
+                starContainer.innerHTML = '<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>';
+            } else {
+                starContainer.innerHTML = '<i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>';
+            }
+        }
+
+        function resetQuiz() {
+            playSound('click');
+            initQuiz();
+        }
+
+        // Certificate Logic
+        function openCertificateModal() {
+            playSound('click');
+            document.getElementById('cert-student-name').textContent = currentStudent.name;
+            document.getElementById('cert-student-class').textContent = 'Siswa Kelas ' + currentStudent.studentClass;
+            document.getElementById('cert-score').textContent = quizScore;
+
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+            document.getElementById('cert-date').textContent = dateStr;
+
+            document.getElementById('modal-certificate').classList.remove('hidden');
+        }
+
+        function closeCertificateModal() {
+            playSound('click');
+            document.getElementById('modal-certificate').classList.add('hidden');
+        }
+
+        // Initializer on window load
+        window.onload = function() {
+            renderMemorizeCards();
+            initMemoryGame();
+            updateStudentProfileUI();
+        };
+    </script>
+</body>
+</html>
